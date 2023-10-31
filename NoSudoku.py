@@ -4,9 +4,6 @@ import math
 
 class NoSudoku(No):
 
-  def __init__(self, Dados: list, Caminho: list):
-    super().__init__(Dados, Caminho)
-
   # Calcula g(h), que é o número de zeros na linha e coluna do valor adicionado
   def calculaHeuristica(self):
     h = 0

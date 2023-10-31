@@ -1,5 +1,6 @@
 from No import No
 from NoSudoku import NoSudoku
+import random
 
 def buscaProfundidadeIterativa(noRaiz: No) -> bool:
     profundidade_maxima = 1
@@ -34,7 +35,6 @@ def busca(noRaiz: No, func) -> bool:
         Visitados = []
         Visitados.append(Fila[0].Dados)
         while Fila:
-            print(Fila[0].Dados)
             noAtual = Fila.pop(0)
             if noAtual.verificarFinal():
                 noAtual.printarCaminho(Visitados)
@@ -59,6 +59,41 @@ def buscaUniforme(noRaiz: No) -> bool:
 def buscaGulosa(noRaiz: No) -> bool:
     return busca(noRaiz, lambda x: x.calculaHeuristica())
 
+def subidaDeEncosta(noRaiz: No):
+    noAtual = noRaiz  
+    while True:
+        Vizinhos = noAtual.nosFilhos() 
+        if not Vizinhos:
+            print(noAtual.Dados)
+            return True
+        Melhor_Vizinho = max(Vizinhos, key= lambda x: x.calculaHeuristica())
+        if Melhor_Vizinho.calculaHeuristica() >= noAtual.calculaHeuristica():  
+            print(noAtual.Dados)
+            return True
+        noAtual = Melhor_Vizinho 
+
+def hill_climbing(x0: No, max_moves=10):
+    current_node = x0  # Solução inicial
+    num_moves = 0
+
+    while True:
+        neighbors = current_node.nosFilhos()
+        if not neighbors:
+            print(current_node.Dados)
+            return True
+
+        best_neighbor = max(neighbors, key=lambda x: x.calculaHeuristica())
+        if best_neighbor.calculaHeuristica() >= current_node.calculaHeuristica():
+            print(current_node.Dados)
+            if num_moves >= max_moves:
+                return False  # Parar se atingir o limite de movimentos laterais
+            else:
+                # Faça um movimento lateral, escolhendo um vizinho aleatório
+                current_node = random.choice(neighbors)
+                num_moves += 1
+        else:
+            current_node = best_neighbor
+
 noRaiz = NoSudoku([
     #? Médio 1
     # [2, 1, 4, 0],
@@ -77,5 +112,5 @@ noRaiz = NoSudoku([
     [0,0,0,0]
 ], [])
 
-Teste = buscaGulosa(noRaiz)
+Teste = buscaProfundidadeIterativa(noRaiz)
 print(Teste)

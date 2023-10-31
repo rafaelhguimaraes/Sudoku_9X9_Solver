@@ -35,9 +35,6 @@ class No:
   def verificarFinal(self):
     pass
 
-  def custo_A_para_B(self):
-    pass
-
   def printarCaminho(self, Visitados: list):
 
     # Printa todos os nós que passou
@@ -60,7 +57,3 @@ class No:
     print(f'Número de nós visitados: {len(Visitados)}')
     print(f'Profundidade: {len(self.Caminho) - 1}')
     print(f'Custo Total: {self.calculaCustoCaminho()}')
-
-
-  def noPai(self):
-    return self.Caminho[-1]
