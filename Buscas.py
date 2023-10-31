@@ -1,52 +1,42 @@
 from No import No
 from NoSudoku import NoSudoku
 
-def profundidadeIterativa(noRaiz: No) -> bool:
-    profundidade_maxima = 0
+def buscaProfundidadeIterativa(noRaiz: No) -> bool:
+    profundidade_maxima = 1
     Visitados = []
     while True:
-
-        resultado = buscaEmProfundidadeLimitada(noRaiz, profundidade_maxima, Visitados)
+        
+        resultado = buscaProfundidadeLimitada(noRaiz, profundidade_maxima, Visitados)
         if resultado == True:
             return True
 
         profundidade_maxima += 1
 
-def buscaEmProfundidadeLimitada(noRaiz: No, profundidade_maxima: int, Visitados: list) -> str:
+def buscaProfundidadeLimitada(noRaiz: No, profundidade_maxima: int, Visitados: list) -> str:
     if profundidade_maxima < 0:
         return False
-
+    
+    Visitados.append(noRaiz)
     if noRaiz.verificarFinal():
         noRaiz.printarCaminho(Visitados)
         return True
-
-    if profundidade_maxima == 0:
-        return False
-
+    
     for filho in noRaiz.nosFilhos():
-        Visitados.append(filho)
-        resultado = buscaEmProfundidadeLimitada(filho, profundidade_maxima - 1, Visitados)
+        resultado = buscaProfundidadeLimitada(filho, profundidade_maxima - 1, Visitados)
         if resultado == True:
             return True
 
     return False
 
-def custoUniforme(noRaiz: No) -> bool:
-        # Fila de prioridade com os Nós em relação ao seu Custo
+def busca(noRaiz: No, func) -> bool:
         Fila = [noRaiz]
 
-        # Lista com os Nós já visitados
         Visitados = []
-
-        # Enquanto tem nós para visitar
+        Visitados.append(Fila[0].Dados)
         while Fila:
-
-            # Pega o primeiro valor da Fila (Maior prioridade, ou seja, menor custo)
+            print(Fila[0].Dados)
             noAtual = Fila.pop(0)
-            Visitados.append(noAtual.Dados)
-
-            # Verifica se achou a solução final
-            if noAtual.verificarFinal() and not Fila or not noAtual.calculaCustoCaminho() > Fila[0].calculaCustoCaminho():
+            if noAtual.verificarFinal():
                 noAtual.printarCaminho(Visitados)
                 return True
 
@@ -57,38 +47,29 @@ def custoUniforme(noRaiz: No) -> bool:
                 Fila.append(Filhos[i])
                 Visitados.append(Filhos[i].Dados)
 
-            Fila = sorted(Fila, key=lambda x: (x.calculaCustoCaminho()))
+            Fila = sorted(Fila, key= func)
         return False
 
-def aStar(noRaiz: No) -> bool:
-        Fila = [noRaiz]
+def buscaAstar(noRaiz: No) -> bool:
+    return busca(noRaiz, lambda x: x.calculaCustoCaminhoHeuristico())
 
-        Visitados = []
-        while Fila:
+def buscaUniforme(noRaiz: No) -> bool:
+    return busca(noRaiz, lambda x: x.calculaCustoCaminho())
 
-            noAtual = Fila.pop(0)
-            Visitados.append(noAtual.Dados)
-
-            if noAtual.verificarFinal() and not Fila or not noAtual.calculaCustoCaminho() > Fila[0].calculaCustoCaminho():
-                noAtual.printarCaminho(Visitados)
-                return True
-
-            Filhos = noAtual.nosFilhos()
-
-            for i in range(len(Filhos)):
-              if Filhos[i].Dados not in Visitados:
-                Fila.append(Filhos[i])
-                Visitados.append(Filhos[i].Dados)
-
-            Fila = sorted(Fila, key=lambda x: (x.calculaCustoCaminhoHeuristico()))
-        return False
+def buscaGulosa(noRaiz: No) -> bool:
+    return busca(noRaiz, lambda x: x.calculaHeuristica())
 
 noRaiz = NoSudoku([
-    [2, 1, 4, 0],
-    [0, 0, 0, 2],
-    [0, 2, 0, 1],
-    [0, 3, 2, 0]
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9]
 ], [])
 
-Teste = custoUniforme(noRaiz)
+Teste = buscaGulosa(noRaiz)
 print(Teste)
