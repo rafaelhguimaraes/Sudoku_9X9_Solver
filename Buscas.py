@@ -60,10 +60,21 @@ def buscaGulosa(noRaiz: No) -> bool:
     return busca(noRaiz, lambda x: x.calculaHeuristica())
 
 noRaiz = NoSudoku([
-    [2, 1, 4, 0],
-    [0, 0, 0, 2],
-    [0, 2, 0, 1],
-    [0, 3, 2, 0]
+    #? Médio 1
+    # [2, 1, 4, 0],
+    # [0, 0, 0, 2],
+    # [0, 2, 0, 1],
+    # [0, 3, 2, 0]
+    #? Médio 2
+    # [0, 0, 0, 0],
+    # [1, 0, 3, 0],
+    # [4, 3, 1, 0],
+    # [2, 0, 0, 0]
+    #! Difícil
+    [0,0,0,3],
+    [0,4,0,0],
+    [0,0,3,2],
+    [0,0,0,0]
 ], [])
 
 Teste = buscaGulosa(noRaiz)
