@@ -59,19 +59,6 @@ def buscaUniforme(noRaiz: No) -> bool:
 def buscaGulosa(noRaiz: No) -> bool:
     return busca(noRaiz, lambda x: x.calculaHeuristica())
 
-def subidaDeEncosta(noRaiz: No):
-    noAtual = noRaiz  
-    while True:
-        Vizinhos = noAtual.nosFilhos() 
-        if not Vizinhos:
-            print(noAtual.Dados)
-            return True
-        Melhor_Vizinho = max(Vizinhos, key= lambda x: x.calculaHeuristica())
-        if Melhor_Vizinho.calculaHeuristica() >= noAtual.calculaHeuristica():  
-            print(noAtual.Dados)
-            return True
-        noAtual = Melhor_Vizinho 
-
 def hill_climbing(x0: No, max_moves=30000, max_lateral_moves=30000):
     current_node = x0  # Solução inicial
     num_moves = 0
@@ -93,7 +80,7 @@ def hill_climbing(x0: No, max_moves=30000, max_lateral_moves=30000):
                 print("Ainda existe zero, resetando")
                 return False
 
-        best_neighbor = max(neighbors, key=lambda x: x.calculaHeuristica())
+        best_neighbor = min(neighbors, key=lambda x: x.calculaHeuristica())
         if best_neighbor.calculaHeuristica() >= current_node.calculaHeuristica():
             print("Configuração Atual:")
             current_node.printarCaminho([])
