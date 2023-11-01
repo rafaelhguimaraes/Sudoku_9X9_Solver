@@ -72,45 +72,69 @@ def subidaDeEncosta(noRaiz: No):
             return True
         noAtual = Melhor_Vizinho 
 
-def hill_climbing(x0: No, max_moves=10):
+def hill_climbing(x0: No, max_moves=30000, max_lateral_moves=30000):
     current_node = x0  # Solução inicial
     num_moves = 0
+    num_nodes_visited = 0
+    total_cost = 0
+    lateral_moves = 0
 
     while True:
         neighbors = current_node.nosFilhos()
+        num_nodes_visited += 1
         if not neighbors:
-            print(current_node.Dados)
-            return True
+            if current_node.verificarFinal():
+                print("Configuração Atual:")
+                current_node.printarCaminho([])
+                print(f"Nós Visitados: {num_nodes_visited}")
+                print(f"Custo: {total_cost}")
+                return True
+            else:
+                print("Ainda existe zero, resetando")
+                return False
 
         best_neighbor = max(neighbors, key=lambda x: x.calculaHeuristica())
         if best_neighbor.calculaHeuristica() >= current_node.calculaHeuristica():
-            print(current_node.Dados)
+            print("Configuração Atual:")
+            current_node.printarCaminho([])
+            print(f"Nós Visitados: {num_nodes_visited}")
+            print(f"Custo: {total_cost}")
             if num_moves >= max_moves:
                 return False  # Parar se atingir o limite de movimentos laterais
             else:
                 # Faça um movimento lateral, escolhendo um vizinho aleatório
                 current_node = random.choice(neighbors)
                 num_moves += 1
+
+                if num_moves >= max_moves // 2 and lateral_moves < max_lateral_moves:
+                    # Introduza a lógica de movimentação lateral
+                    current_node = random.choice(neighbors)
+                    lateral_moves += 1
         else:
             current_node = best_neighbor
+        total_cost += 1
 
 noRaiz = NoSudoku([
-    #? Médio 1
-    # [2, 1, 4, 0],
+    #? Médio 1 = 50% de zeros
+    # [2, 1, 0, 0],
     # [0, 0, 0, 2],
-    # [0, 2, 0, 1],
-    # [0, 3, 2, 0]
+    # [0, 2, 0, 0],
+    # [0, 0, 2, 0]
     #? Médio 2
     # [0, 0, 0, 0],
     # [1, 0, 3, 0],
     # [4, 3, 1, 0],
     # [2, 0, 0, 0]
+    # [1,0,0,0],
+    # [0,2,0,0],
+    # [0,0,3,0],
+    # [0,0,0,4]
     #! Difícil
-    [0,0,0,3],
-    [0,4,0,0],
-    [0,0,3,2],
-    [0,0,0,0]
+    # [0,0,0,3],
+    # [0,4,0,0],
+    # [0,0,3,2],
+    # [0,0,0,0]
 ], [])
 
-Teste = buscaProfundidadeIterativa(noRaiz)
+Teste = hill_climbing(noRaiz)
 print(Teste)
