@@ -1,5 +1,6 @@
 from No import No
 from NoSudoku import NoSudoku
+from NoEsc import NoProcessador
 import random
 
 def buscaProfundidadeIterativa(noRaiz: No) -> bool:
@@ -121,3 +122,24 @@ noRaiz = NoSudoku([
 ], [])
 Teste = subidaDeEncosta(noRaiz)
 print(Teste)
+
+#!  Definindo as tarefas para teste
+# tarefas = [
+#     {'id': 1, 'tempo': 10, 'processador': None, 'dependencias': []},
+#     {'id': 2, 'tempo': 15, 'processador': None, 'dependencias': []},
+#     {'id': 3, 'tempo': 20, 'processador': None, 'dependencias': []},
+#     {'id': 4, 'tempo': 30, 'processador': None, 'dependencias': []},
+#     {'id': 5, 'tempo': 40, 'processador': None, 'dependencias': []},
+#     {'id': 6, 'tempo': 50, 'processador': None, 'dependencias': []},
+#     {'id': 7, 'tempo': 60, 'processador': None, 'dependencias': []},
+#     {'id': 8, 'tempo': 70, 'processador': None, 'dependencias': []},
+#     {'id': 9, 'tempo': 80, 'processador': None, 'dependencias': []},
+#     {'id': 10,'tempo':90,'processador' :None,'dependencias':[5 ,6]}
+# ]
+
+
+# noRaiz = NoProcessador(tarefas)
+# buscaProfundidadeIterativa(noRaiz)
+# buscaAstar(noRaiz)
+# buscaGulosa(noRaiz)
+
