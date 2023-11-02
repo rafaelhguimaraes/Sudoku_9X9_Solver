@@ -35,6 +35,15 @@ class No:
   def verificarFinal(self):
     pass
 
+  def funcaoAvaliacao(self):
+    pass
+  
+  def criarInicioSubidaDeEncosta(self):
+    pass
+
+  def gerarVizinhos(self):
+    pass
+
   def printarCaminho(self, Visitados: list):
 
     # Printa todos os nós que passou

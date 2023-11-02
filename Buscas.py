@@ -59,60 +59,35 @@ def buscaUniforme(noRaiz: No) -> bool:
 def buscaGulosa(noRaiz: No) -> bool:
     return busca(noRaiz, lambda x: x.calculaHeuristica())
 
-def subidaDeEncosta(noRaiz: No):
-    noAtual = noRaiz  
-    while True:
-        Vizinhos = noAtual.nosFilhos() 
-        if not Vizinhos:
-            print(noAtual.Dados)
-            return True
-        Melhor_Vizinho = max(Vizinhos, key= lambda x: x.calculaHeuristica())
-        if Melhor_Vizinho.calculaHeuristica() >= noAtual.calculaHeuristica():  
-            print(noAtual.Dados)
-            return True
-        noAtual = Melhor_Vizinho 
-
-def hill_climbing(x0: No, max_moves=30000, max_lateral_moves=30000):
-    current_node = x0  # Solução inicial
-    num_moves = 0
-    num_nodes_visited = 0
-    total_cost = 0
-    lateral_moves = 0
+def subidaDeEncosta(x0: No, Maximo = 300) -> bool:
+    x0.criarInicioSubidaDeEncosta()
+    noAtual = x0  
+    melhorSolucao = x0
+    Movimentos = 0
+    Visitados = []
 
     while True:
-        neighbors = current_node.nosFilhos()
-        num_nodes_visited += 1
-        if not neighbors:
-            if current_node.verificarFinal():
-                print("Configuração Atual:")
-                current_node.printarCaminho([])
-                print(f"Nós Visitados: {num_nodes_visited}")
-                print(f"Custo: {total_cost}")
-                return True
-            else:
-                print("Ainda existe zero, resetando")
+
+        Vizinhos = noAtual.gerarVizinhos()
+        melhorVizinho = max(Vizinhos, key= lambda x: x.funcaoAvaliacao())
+        Visitados.extend(Vizinhos)
+
+        if melhorVizinho.funcaoAvaliacao() <= noAtual.funcaoAvaliacao():
+            if noAtual.verificarFinalSubidaDeEncosta() or Movimentos == Maximo:
+                if melhorSolucao.funcaoAvaliacao() <= noAtual.funcaoAvaliacao():
+                     melhorSolucao = noAtual
+                melhorSolucao.printarCaminho(Visitados)
+                if noAtual.verificarFinalSubidaDeEncosta():
+                    return True
                 return False
-
-        best_neighbor = max(neighbors, key=lambda x: x.calculaHeuristica())
-        if best_neighbor.calculaHeuristica() >= current_node.calculaHeuristica():
-            print("Configuração Atual:")
-            current_node.printarCaminho([])
-            print(f"Nós Visitados: {num_nodes_visited}")
-            print(f"Custo: {total_cost}")
-            if num_moves >= max_moves:
-                return False  # Parar se atingir o limite de movimentos laterais
             else:
-                # Faça um movimento lateral, escolhendo um vizinho aleatório
-                current_node = random.choice(neighbors)
-                num_moves += 1
-
-                if num_moves >= max_moves // 2 and lateral_moves < max_lateral_moves:
-                    # Introduza a lógica de movimentação lateral
-                    current_node = random.choice(neighbors)
-                    lateral_moves += 1
-        else:
-            current_node = best_neighbor
-        total_cost += 1
+                if melhorSolucao.funcaoAvaliacao() <= noAtual.funcaoAvaliacao():
+                    melhorSolucao = noAtual
+                # Escolhe aleatoriamente um novo nível da árvore para fazer a busca
+                noAtual = random.choice(Vizinhos)
+                Movimentos += 1
+                continue
+        noAtual = melhorVizinho  
 
 noRaiz = NoSudoku([
     #? Médio 1 = 50% de zeros
@@ -134,7 +109,15 @@ noRaiz = NoSudoku([
     # [0,4,0,0],
     # [0,0,3,2],
     # [0,0,0,0]
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+        [6, 0, 0, 1, 9, 5, 0, 0, 0],
+        [0, 9, 8, 0, 0, 0, 0, 6, 0],
+        [8, 0, 0, 0, 6, 0, 0, 0, 3],
+        [4, 0, 0, 8, 0, 3, 0, 0, 1],
+        [7, 0, 0, 0, 2, 0, 0, 0, 6],
+        [0, 6, 0, 0, 0, 0, 2, 8, 0],
+        [0, 0, 0, 4, 1, 9, 0, 0, 5],
+        [0, 0, 0, 0, 8, 0, 0, 7, 9]
 ], [])
-
-Teste = hill_climbing(noRaiz)
+Teste = subidaDeEncosta(noRaiz)
 print(Teste)
