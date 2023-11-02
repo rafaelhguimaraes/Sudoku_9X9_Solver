@@ -55,11 +55,11 @@ def busca(noRaiz: No, func) -> bool:
             Filhos = noAtual.nosFilhos()
 
             for i in range(len(Filhos)):
+              print(Filhos[i].Dados)
               if Filhos[i].Dados not in Visitados:
                 Fila.append(Filhos[i])
                 Visitados.append(Filhos[i].Dados)
             Fila = sorted(Fila, key= func)
-            
         return False
 
 def buscaAstar(noRaiz: No) -> bool:

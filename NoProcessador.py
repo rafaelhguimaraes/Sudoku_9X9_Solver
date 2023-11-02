@@ -71,7 +71,7 @@ class NoProcessador(No):
                             y = minimo + tarefa['tempo']
                         processador.append([tarefa['id'], x, y])
                         prs = copy.deepcopy(self.Dados)
-                        novoNo = NoProcessador(prs, self.Caminho + [self], self.Config)
+                        novoNo = NoProcessador(prs, self.Caminho, self.Config)
                         novoNo.Custo= tarefa['tempo']
                         novoNo.Heuristica = h
                         lista.append(novoNo)
