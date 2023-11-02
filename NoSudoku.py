@@ -104,3 +104,25 @@ class NoSudoku(No):
     if self.f < n*n + n*n:
        return False
     return True
+  
+  def printarCaminho(self, Visitados: list):
+    # Printa todos os nós que passou
+    print("Solução: ")
+    n = len(self.Dados)
+
+    for i in range(n):
+        for j in range(n):
+            print(self.Caminho[0].Dados[i][j], end="   ")
+        print()  # Pula para a próxima linha
+
+    for no in self.Caminho[1:]:
+        print("-->")
+        for i in range(n):
+            for j in range(n):
+                print(no.Dados[i][j], end="   ")
+            print()
+    # Printa outras informações
+    print()
+    print(f'Número de nós visitados: {len(Visitados)}')
+    print(f'Profundidade: {len(self.Caminho) - 1}')
+    print(f'Custo Total: {self.calculaCustoCaminho()}')
